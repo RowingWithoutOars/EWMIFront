@@ -1,5 +1,5 @@
 // A custom Nightwatch assertion.
-// the name of the method is the filename.
+// the cyd of the method is the filename.
 // can be used in tests like this:
 //
 //   browser.assert.elementCount(selector, count)

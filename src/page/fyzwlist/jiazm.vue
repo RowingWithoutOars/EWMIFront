@@ -65,7 +65,7 @@
                     }else{
                         throw new Error('获取数据失败');
                     }
-                    this.getUsers();
+                    this.getData();
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -76,9 +76,9 @@
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.offset = (val - 1)*this.limit;
-                this.getUsers()
+                this.getData()
             },
-            async getUsers(){
+            async getData(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});
                 this.tableData = [];
                 Users.forEach(item => {

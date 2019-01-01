@@ -1,9 +1,28 @@
+<!--suppress ALL -->
 <template>
     <div class="fillcontain">
         <head-top></head-top>
-
+        <div class="serach" style="text-align: left;padding: 20px">
+            <el-col :span="24" class="toolbar" style="padding-bottom: 0;">
+                <el-form :inline="true">
+                    <el-form-item>
+                        <el-cascader
+                            :options="options"
+                            @active-item-change="handleItemChange"
+                            :show-all-levels="false"
+                            :props="props"
+                        ></el-cascader>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="handleChaxun">查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" @click="addData()">新增</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </div>
         <div class="table_container">
-            工具条
             <el-table
                 :data="tableData"
                 highlight-current-row
@@ -13,30 +32,46 @@
                   width="100">
                 </el-table-column>
                 <el-table-column
-                  property="nereidida"
-                  label="沙蚕目"
-                  width="220">
+                    prop="jcd"
+                    label="监测点"
+                    sortable
+                    width="180"
+                    column-key="jcd_time"
+                    :filters=jcd
+                    :filter-method="filterHandler"
+                >
                 </el-table-column>
                 <el-table-column
-                  property="limnodrilus_hoffmeisteri"
-                  label="霍甫水丝蚓"
-                  width="220">
+                    prop="jcd_time"
+                    label="日期"
+                    sortable
+                    width="180"
+                    column-key="jcd_time"
+                    :filters=jcd_time
+                    :filter-method="filterHandler"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    prop="key"
+                    label="生物"
+                    sortable
+                    width="180"
+                    column-key="key"
+                    :filters=shengwu
+                    :filter-method="filterHandler"
+                >
+                </el-table-column>
+
+                <el-table-column
+                    property="value"
+                    label="数量">
                 </el-table-column>
                 <el-table-column
-                  property="branchiura_sowerbyi"
-                  label="苏氏尾鳃蚓">
-                </el-table-column>
-                <el-table-column
-                    property="branchiura_sowerbyi"
-                    label="苏氏尾鳃蚓">
-                </el-table-column>
-                <el-table-column
-                    property="branchiura_sowerbyi"
-                    label="苏氏尾鳃蚓">
-                </el-table-column>
-                <el-table-column label="操作" width="150">
+                    label="操作"
+                width="150">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button size="small" @click="updateData()">编辑</el-button>
                         <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
                     </template>
                 </el-table-column>
@@ -51,6 +86,7 @@
                   :total="count">
                 </el-pagination>
             </div>
+
         </div>
     </div>
 </template>
@@ -61,44 +97,48 @@
     export default {
         data(){
             return {
-                tableData: [{
-                    nereidida: '',
-                    limnodrilus_hoffmeisteri: '',
-                    branchiura_sowerbyi: '',
-                    Helobdella_sp: '',
-                    Glossiphonia_lata: '',
-                    Rheopelopia_sp: '',
-                    Tanypus_chinensis: '',
-                    Tanypus_sp: '',
-                    Cryptochironomus_sp: '',
-                    Polypodilum_sp: '',
-                    Einfeldia_kieffer: '',
-                    Chironomus_sp: '',
-                    Culicoides_sp: '',
-                    Grandidierella_sp: '',
-                    Bellamya_sp: '',
-                    Parafossarulus_striatulus: '',
-                    Semisulcospira_libertina: '',
-                    Unio_douglasiae:'',
-                    Corbicula_fluminea:''
+                options: [{
+                    label: '监测点',
+                    shuxing:[]
                 }, {
-                  registe_time: '2016-05-04',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1517 弄'
-                }, {
-                  registe_time: '2016-05-01',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1519 弄'
-                }, {
-                  registe_time: '2016-05-03',
-                  username: '王小虎',
-                  city: '上海市普陀区金沙江路 1516 弄'
+                    label: '监测时间',
+                    shuxing:[]
+                },{
+                    label: '单项指标',
+                    shuxing:[]
                 }],
+                props:{
+                    value:'label',
+                    children:'shuxing'
+                },
+                tableData: [{
+                    jcd:"",
+                    jcd_time:"",
+                    sxkey:"",
+                    value:0.0
+                }],
+                jcd_time:[
+                    {text: '2018-01', value: '2018-01'},
+                    {text: '2018-02', value: '2018-02'},
+                    {text: '2018-03', value: '2018-03'},
+                    {text: '2018-04', value: '2018-04'}],
+                jcd:[
+                    {text: 'TH1', value: 'TH1'},
+                    {text: 'TH2', value: 'TH2'},
+                    {text: 'TH3', value: 'TH3'},
+                    {text: 'TH4', value: 'TH4'}],
+                sxkey:[
+                    {text: 'A', value: 'A'},
+                    {text: 'B', value: 'B'},
+                    {text: 'C', value: 'C'},
+                    {text: 'D', value: 'D'}
+                ],
                 currentRow: null,
                 offset: 0,
                 limit: 20,
                 count: 0,
                 currentPage: 1,
+                switch_value:true
             }
         },
     	components: {
@@ -116,7 +156,7 @@
                     }else{
                         throw new Error('获取数据失败');
                     }
-                    this.getUsers();
+                    this.getData();
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -124,21 +164,60 @@
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
+            updateData(index, row){
+                this.$router.push({ path: 'addData'})
+            },
+            updateData(){
+                this.$router.push({ path: 'addData'})
+            },
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.offset = (val - 1)*this.limit;
-                this.getUsers()
+                this.getData()
             },
-            async getUsers(){
+            clearFilter() {
+                this.$refs.filterTable.clearFilter();
+            },
+            filterHandler(value, row, column) {
+                const property = column['property'];
+                return row[property] === value;
+            },
+            async getData(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});
                 this.tableData = [];
                 Users.forEach(item => {
                     const tableData = {};
-                    tableData.username = item.username;
+                    tableData.jcd = item.jcd;
                     tableData.registe_time = item.registe_time;
                     tableData.city = item.city;
                     this.tableData.push(tableData);
                 })
+            },
+            handleItemChange(val) {
+                setTimeout(_ => {
+                    if (val.indexOf('监测点') > -1 && !this.options[0].shuxing.length) {
+                        this.options[0].shuxing =this.jcd.map((value,i) => {
+                            return {
+                                label: value.value,
+                                value: value.value
+                            }
+                        });;
+                    } else if (val.indexOf('监测时间') > -1 && !this.options[1].shuxing.length) {
+                        this.options[1].shuxing = this.jcd_time.map((value,i) => {
+                            return {
+                                label: value.value,
+                                value: value.value
+                            }
+                        });
+                    }else if (val.indexOf('单项指标') > -1 && !this.options[1].shuxing.length) {
+                        this.options[2].shuxing = this.sxkey.map((value, i) => {
+                            return {
+                                label: value.value,
+                                value: value.value
+                            }
+                        });
+                    }
+                }, 300);
             }
         },
     }

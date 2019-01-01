@@ -9,13 +9,13 @@
                   <template slot-scope="props">
                     <el-form label-position="left" inline class="demo-table-expand">
                       <el-form-item label="店铺名称">
-                        <span>{{ props.row.name }}</span>
+                        <span>{{ props.row.cyd }}</span>
                       </el-form-item>
                       <el-form-item label="店铺地址">
-                        <span>{{ props.row.address }}</span>
+                        <span>{{ props.row.cyd_time }}</span>
                       </el-form-item>
                       <el-form-item label="店铺介绍">
-                        <span>{{ props.row.description }}</span>
+                        <span>{{ props.row.jcd_time }}</span>
                       </el-form-item>
                       <el-form-item label="店铺 ID">
                         <span>{{ props.row.id }}</span>
@@ -76,20 +76,20 @@
             <el-dialog title="修改店铺信息" v-model="dialogFormVisible">
                 <el-form :model="selectTable">
                     <el-form-item label="店铺名称" label-width="100px">
-                        <el-input v-model="selectTable.name" auto-complete="off"></el-input>
+                        <el-input v-model="selectTable.cyd" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="详细地址" label-width="100px">
                         <el-autocomplete
-                          v-model="address.address"
+                          v-model="address.cyd_time"
                           :fetch-suggestions="querySearchAsync"
                           placeholder="请输入地址"
                           style="width: 100%;"
                           @select="addressSelect"
                         ></el-autocomplete>
-                        <span>当前城市：{{city.name}}</span>
+                        <span>当前城市：{{city.cyd}}</span>
                     </el-form-item>
                     <el-form-item label="店铺介绍" label-width="100px">
-                        <el-input v-model="selectTable.description"></el-input>
+                        <el-input v-model="selectTable.jcd_time"></el-input>
                     </el-form-item>
                     <el-form-item label="联系电话" label-width="100px">
                         <el-input v-model="selectTable.phone"></el-input>
@@ -141,7 +141,7 @@
                 dialogFormVisible: false,
                 categoryOptions: [],
                 selectedCategory: [],
-                address: {},
+                cyd_time: {},
             }
         },
         created(){
@@ -172,8 +172,8 @@
                     categories.forEach(item => {
                         if (item.sub_categories.length) {
                             const addnew = {
-                                value: item.name,
-                                label: item.name,
+                                value: item.cyd,
+                                label: item.cyd,
                                 children: []
                             }
                             item.sub_categories.forEach((subitem, index) => {
@@ -181,8 +181,8 @@
                                     return
                                 }
                                 addnew.children.push({
-                                    value: subitem.name,
-                                    label: subitem.name,
+                                    value: subitem.cyd,
+                                    label: subitem.cyd,
                                 })
                             })
                             this.categoryOptions.push(addnew)
@@ -194,13 +194,13 @@
             },
             async getResturants(){
                 const {latitude, longitude} = this.city;
-                const restaurants = await getResturants({latitude, longitude, offset: this.offset, limit: this.limit});
+                const restaurants = await getResturants({latitude: shengwu, longitude, offset: this.offset, limit: this.limit});
                 this.tableData = [];
                 restaurants.forEach(item => {
                     const tableData = {};
-                    tableData.name = item.name;
-                    tableData.address = item.address;
-                    tableData.description = item.description;
+                    tableData.name = item.cyd;
+                    tableData.address = item.cyd_time;
+                    tableData.description = item.jcd_time;
                     tableData.id = item.id;
                     tableData.phone = item.phone;
                     tableData.rating = item.rating;
@@ -220,14 +220,14 @@
             },
             handleEdit(index, row) {
                 this.selectTable = row;
-                this.address.address = row.address;
+                this.cyd_time.cyd_time = row.cyd_time;
                 this.dialogFormVisible = true;
                 this.selectedCategory = row.category.split('/');
                 if (!this.categoryOptions.length) {
                     this.getCategory();
                 }
             },
-            addFood(index, row){
+            updateData(index, row){
                 this.$router.push({ path: 'addGoods', query: { restaurant_id: row.id }})
             },
             async handleDelete(index, row) {
@@ -256,7 +256,7 @@
                         const cityList = await searchplace(this.city.id, queryString);
                         if (cityList instanceof Array) {
                             cityList.map(item => {
-                                item.value = item.address;
+                                item.value = item.cyd_time;
                                 return item;
                             })
                             cb(cityList)
@@ -268,7 +268,7 @@
             },
             addressSelect(vale){
                 const {address, latitude, longitude} = vale;
-                this.address = {address, latitude, longitude};
+                this.address = {address: cyd_time, latitude: shengwu, longitude};
             },
             handleServiceAvatarScucess(res, file) {
                 if (res.status == 1) {
@@ -292,7 +292,7 @@
             async updateShop(){
                 this.dialogFormVisible = false;
                 try{
-                    Object.assign(this.selectTable, this.address);
+                    Object.assign(this.selectTable, this.cyd_time);
                     this.selectTable.category = this.selectedCategory.join('/');
                     const res = await updateResturant(this.selectTable)
                     if (res.status == 1) {

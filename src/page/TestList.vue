@@ -1,276 +1,146 @@
 <template>
-    <section>
-        工具条
-        <el-col :span="24" class="toolbar" style="padding-bottom: 0;">
-            <el-form :inline="true" :model="filters">
-                <el-form-item>
-                    <el-input v-model="filters.name" placeholder=""></el-input>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" v-on:click="getFoods">查询</el-button>
-                </el-form-item>
-                <el-form-item>
-                    <el-button type="primary" @click="handleAdd">新增</el-button>
-                </el-form-item>
-            </el-form>
-        </el-col>
-
-        列表
-        <el-table :data="foods" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;">
-            <el-table-column type="selection" width="55">
-            </el-table-column>
-            <el-table-column type="index" width="60">
-            </el-table-column>
-            <el-table-column prop="food_name" label="菜名" width="120" sortable>
-            </el-table-column>
-            <el-table-column prop="food_id" label="编号" width="100" sortable>
-            </el-table-column>
-            <el-table-column prop="food_price" label="价格" width="100" sortable>
-            </el-table-column>
-            <el-table-column prop="food_discount" label="折扣" width="120" sortable>
-            </el-table-column>
-            <el-table-column prop="food_contents" label="评论" min-width="180" sortable>
-            </el-table-column>
-            <el-table-column label="操作" width="150">
-                <template slot-scope="scope">
-                    <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-                </template>
-            </el-table-column>
-        </el-table>
-
-        工具条
-        <el-col :span="24" class="toolbar">
-            <el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-            <el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-            </el-pagination>
-        </el-col>
-
-        <!--编辑界面-->
-        <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-            <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
-                <el-form-item label="菜名" prop="food_name">
-                    <el-input v-model="editForm.food_name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="价格">
-                    <el-input-number v-model="editForm.food_price" :min="0" :max="200"></el-input-number>
-                </el-form-item>
-                <el-form-item label="折扣" prop="food_discount">
-                    <el-input v-model="editForm.food_discount" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="店家评论" prop="food_contents">
-                    <el-input type="textarea" v-model="editForm.food_contents" auto-complete="off"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="editFormVisible = false">取消</el-button>
-                <el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
-            </div>
-        </el-dialog>
-
-        新增界面
-        <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-            <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
-                <el-form-item label="菜名" prop="food_name">
-                    <el-input v-model="addForm.food_name" auto-complete="off"></el-input>
-                </el-form-item>
-                <el-form-item label="单价">
-                    <el-input-number v-model="addForm.food_price" :min="0" :max="200"></el-input-number>
-                </el-form-item>
-                <el-form-item label="折扣">
-                    <el-input v-model="addForm.food_discount"></el-input>
-                </el-form-item>
-            </el-form>
-            <div slot="footer" class="dialog-footer">
-                <el-button @click.native="addFormVisible = false">取消</el-button>
-                <el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
-            </div>
-        </el-dialog>
-    </section>
+    <div id="helloword">
+        <div id="map2"></div>
+    </div>
 </template>
-
 <script>
+    import china from '../../../static/china.js'
     export default {
-        data: function () {
+        data() {
             return {
-                filters: {
-                    name: ''
-                },
-                foods: [],
-                total: 0,
-                page: 1,
-                stores_num: 10000,
-                listLoading: false,
-                sels: [], // 列表选中列
-
-                editFormVisible: false, // 编辑界面是否显示
-                editLoading: false,
-                editFormRules: {
-                    name: [
-                        {required: true, message: '请输入菜名', trigger: 'blur'}
-                    ]
-                },
-                // 编辑界面数据
-                editForm: {
-                    food_id: 0,
-                    food_name: '',
-                    food_price: 10,
-                    food_discount: 1,
-                    food_contents: ''
-                },
-
-                addFormVisible: false, // 新增界面是否显示
-                addLoading: false,
-                addFormRules: {
-                    name: [
-                        {required: true, message: '请输入菜名', trigger: 'blur'}
-                    ]
-                },
-                // 新增界面数据
-                addForm: {
-                    food_name: '',
-                    food_price: 10,
-                    food_discount: 1
-                }
-
+                charts: ''
             }
         },
-        methods: {
-            handleCurrentChange (val) {
-                this.page = val
-                this.getStores()
-            },
-            // 获取食品列表
-            getStores () {
-                let para = {
-                    page: this.page,
-                    name: this.filters.name,
-                    stores_num: 10000
-                }
-                this.listLoading = true
-                // NProgress.start();
-                getFoodListPage(para).then((result) => {
-                    let { total, data } = result
-                    this.total = total
-                this.foods = data
-                this.listLoading = false
-            })
-            },
-            // 删除
-            handleDel: function (index, row) {
-                this.$confirm('确认删除该记录吗?', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true
-                // NProgress.start();
-                let para = row
-                console.log(para)
-                removeFood(para).then((res) => {
-                    this.listLoading = false
-                // NProgress.done();
-                this.$message({
-                    message: '删除成功',
-                    type: 'success'
-                })
-                this.getStores()
-            })
-            }).catch(() => {
+        methods:{
+            initEchart(){
+                // 绘制地图2
+                var myChartMap2 = this.$echarts.init(document.getElementById('map2'));
+                // 地图上数据
+                var myData = [
+                    {cyd: 'TH1', value: [120.443205, 31.178405, 90]},
+                    {cyd: 'TH2', value: [120.446923333333, 31.183655, 120]},
+                    {cyd: 'TH3', value: [120.38, 37.35, 142]},
+                    {cyd: 'TH4', value: [122.207216, 29.985295, 123]},
+                    {cyd: 'TH5', value:[110.245672,30.7787677,566]}
+                ]
 
-                })
-            },
-            // 显示编辑界面
-            handleEdit: function (index, row) {
-                this.editFormVisible = true
-                this.editForm = Object.assign({}, row)
-            },
-            // 显示新增界面
-            handleAdd: function () {
-                this.addFormVisible = true
-                this.addForm = {
-                    food_name: '',
-                    food_price: 10,
-                    food_discount: 1
-                }
-            },
-            // 编辑
-            editSubmit: function () {
-                this.$refs.editForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.editLoading = true
-                        let para = Object.assign({}, this.editForm)
-                        console.log(para)
-                        editFood(para).then((res) => {
-                            this.editLoading = false
-                        this.$message({
-                            message: '提交成功',
-                            type: 'success'
-                        })
-                        this.$refs['editForm'].resetFields()
-                        this.editFormVisible = false
-                        this.getStores()
-                    })
-                    })
+                myChartMap2.setOption({
+
+                    // 新建一个地理坐标系 geo ，
+                    geo: {
+                        map: 'china',//地图类型为中国地图
+                        itemStyle:{ // 定义样式
+                            normal:{       // 普通状态下的样式
+                                areaColor:'#6699CC',
+                                borderColor: '#fff',
+                            },
+                            emphasis: {         // 高亮状态下的样式
+                                areaColor: '#e9fbf1'
+                            }
+                        },
+                        scaleLimit:{
+                            min:1,
+                            max:1,
+                        }
+
+                    },
+                    // hover显示目标数据
+                    tooltip : {
+                        trigger: 'item',
+                        // tooltip的trigger的值可以有'item'、'axis'。
+                        //'item':数据项图形触发，主要在散点图，饼图等无类目轴的图表中使用。
+                        //'axis':坐标轴触发，主要在柱状图，折线图等会使用类目轴的图表中使用
+                        textStyle:{
+                            align:'left'
+                        },
+                    },
+                    // 图表背景色
+                    backgroundColor: '#404a59',
+                    // 标志颜色
+                    color:'red',
+                    // 新建散点图series
+                    series:[{
+                        cyd:'',//series名称
+                        type:'scatter',//为散点类型
+                        coordinateSystem: 'geo',// series坐标系类型
+                        data:myData,
+                        symbol:'pin',
+                        symbolSize:[20,20]
+                    }],
+
+                    // 添加视觉映射组件
+                    visualMap: {
+                        type: 'continuous', // 连续型
+                        min: 0,           // 值域最小值，必须参数
+                        max: 600,     // 值域最大值，必须参数
+                        calculable: true, // 是否启用值域漫游
+                        inRange: {
+                            color: ['red']
+                            // 指定数值从低到高时的颜色变化
+                        },
+                        textStyle: {
+                            color: '#fff' // 值域控件的文本颜色
+                        }
                     }
                 })
             },
-            // 新增
-            addSubmit: function () {
-                this.$refs.addForm.validate((valid) => {
-                    if (valid) {
-                        this.$confirm('确认提交吗？', '提示', {}).then(() => {
-                            this.addLoading = true
-                        // NProgress.start();
-                        let para = Object.assign({}, this.addForm)
-                        console.log(para)
-                        addFood(para).then((res) => {
-                            this.addLoading = false
-                        // NProgress.done();
-                        this.$message({
-                            message: '提交成功',
-                            type: 'success'
-                        })
-                        this.$refs['addForm'].resetFields()
-                        this.addFormVisible = false
-                        this.getStores()
-                    })
-                    })
-                    }
-                })
-            },
-            selsChange: function (sels) {
-                this.sels = sels
-            },
-            // 批量删除
-            batchRemove: function () {
-                var ids = this.sels.map(item => item.id).toString()
-                this.$confirm('确认删除选中记录吗？', '提示', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true
-                // NProgress.start();
-                let para = { ids: ids }
-                batchRemoveFood(para).then((res) => {
-                    this.listLoading = false
-                // NProgress.done();
-                this.$message({
-                    message: '删除成功',
-                    type: 'success'
-                })
-                this.getStores()
-            })
-            }).catch(() => {
-
-                })
-            }
         },
-        mounted () {
-            this.getStores()
-        }
+        mounted(){
+            this.initEchart()
+        },
     }
-
 </script>
-
 <style scoped>
-
+    #helloworld{
+        width: 100%;
+    }
+    .wrapper{
+        width: 76.05%;
+        margin:0 auto;
+        /*background: #000;*/
+    }
+    #zhuxingtu{
+        width: 800px;
+        height:400px;
+        float:left;
+    }
+    #zhuxingtu2{
+        width: 800px;
+        height:400px;
+        margin-left: 10px;
+        float:left;
+    }
+    #shanxingtu{
+        width: 800px;
+        height:400px;
+        margin-top:10px;
+        float: left;
+    }
+    #huanxingtu{
+        width: 800px;
+        height:400px;
+        margin-top:10px;
+        float: left;
+        margin-left: 10px;
+    }
+    #map{
+        width: 800px;
+        height:400px;
+        margin-top:10px;
+        float: left;
+    }
+    #map2{
+        width: 100%;
+        height:800px;
+        margin-top:10px;
+        float: left;
+    }
 </style>
+
+
+
+
+
+
+
+

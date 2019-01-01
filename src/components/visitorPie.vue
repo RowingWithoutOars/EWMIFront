@@ -10,7 +10,7 @@
     import 'echarts/lib/chart/pie';
     import 'echarts/lib/component/title';
     import 'echarts/lib/component/legend';
-    
+
     export default {
         mounted(){
             this.myChart = echarts.init(document.getElementById('visitorpie'));
@@ -36,16 +36,16 @@
                     },
                     series : [
                         {
-                            name: '访问来源',
+                            cyd: '访问来源',
                             type: 'pie',
                             radius : '55%',
                             center: ['50%', '60%'],
                             data:[
-                                {value:this.pieData.beijing, name:'北京'},
-                                {value:this.pieData.shanghai, name:'上海'},
-                                {value:this.pieData.shenzhen, name:'深圳'},
-                                {value:this.pieData.hangzhou, name:'杭州'},
-                                {value:this.pieData.qita, name:'其他'}
+                                {value:this.pieData.beijing, cyd:'北京'},
+                                {value:this.pieData.shanghai, cyd:'上海'},
+                                {value:this.pieData.shenzhen, cyd:'深圳'},
+                                {value:this.pieData.hangzhou, cyd:'杭州'},
+                                {value:this.pieData.qita, cyd:'其他'}
                             ],
                             itemStyle: {
                                 emphasis: {

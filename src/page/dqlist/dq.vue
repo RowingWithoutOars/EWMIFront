@@ -1,15 +1,49 @@
 <template>
     <div class="fillcontain">
         <head-top></head-top>
+        <div class="serach" style="text-align: left;padding: 20px">
+            <el-col :span="24" class="toolbar" style="padding-bottom: 0;">
+                <el-form :inline="true">
+                    <el-form-item>
+                        <el-cascader
+                            :options="options"
+                            @active-item-change="handleItemChange"
+                            :show-all-levels="false"
+                            :props="props"
+                        ></el-cascader>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary" >查询</el-button>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button type="primary">新增</el-button>
+                    </el-form-item>
+                </el-form>
+            </el-col>
+        </div>
         <div class="table_container">
             <el-table
+                ref="filterTable"
                 :data="tableData"
                 highlight-current-row
                 style="width: 100%">
                 <el-table-column
-                    type="index"
-                    width="100">
+                    type="index">
                 </el-table-column>
+                <el-table-column
+                    property="jcd"
+                    label="监测点">
+                </el-table-column>
+                    <el-table-column
+                        prop="date"
+                        label="日期"
+                        sortable
+                        width="180"
+                        column-key="jcd_time"
+                        :filters="[{text: '2018-01', value: '2018-01'}, {text: '2018-02', value: '2018-02'}, {text: '2018-03', value: '2018-03'}, {text: '2018-04', value: '2018-04'}]"
+                        :filter-method="filterHandler"
+                    >
+                    </el-table-column>
                 <el-table-column
                     property="nereidida"
                     label="沙蚕目">
@@ -86,6 +120,12 @@
                     property="corbicula_fluminea"
                     label="河蚬">
                 </el-table-column>
+                <el-table-column label="操作" width="150">
+                    <template slot-scope="scope">
+                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                    </template>
+                </el-table-column>
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
@@ -97,16 +137,31 @@
                     :total="count">
                 </el-pagination>
             </div>
+
         </div>
     </div>
 </template>
 
 <script>
-    import headTop from '../components/headTop'
+    import headTop from '@/components/headTop'
     import {getUserList, getUserCount} from '@/api/getData'
     export default {
         data(){
             return {
+                options: [{
+                    label: '监测点',
+                    shuxing:[]
+                }, {
+                    label: '监测时间',
+                    shuxing:[]
+                },{
+                    label: '单项指标',
+                    shuxing:[]
+                }],
+                props:{
+                    value:'label',
+                    children:'shuxing'
+                },
                 tableData: [{
                     nereidida: '',
                     limnodrilus_hoffmeisteri: '',
@@ -150,7 +205,7 @@
                     }else{
                         throw new Error('获取数据失败');
                     }
-                    this.getUsers();
+                    this.getData();
                 }catch(err){
                     console.log('获取数据失败', err);
                 }
@@ -161,18 +216,46 @@
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.offset = (val - 1)*this.limit;
-                this.getUsers()
+                this.getData()
             },
-            async getUsers(){
+            clearFilter() {
+                this.$refs.filterTable.clearFilter();
+            },
+            filterHandler(value, row, column) {
+                const property = column['property'];
+                return row[property] === value;
+            },
+            async getData(){
                 const Users = await getUserList({offset: this.offset, limit: this.limit});
                 this.tableData = [];
                 Users.forEach(item => {
                     const tableData = {};
-                    tableData.username = item.username;
+                    tableData.jcd = item.jcd;
                     tableData.registe_time = item.registe_time;
                     tableData.city = item.city;
                     this.tableData.push(tableData);
                 })
+            },
+            handleItemChange(val) {
+                console.log('active item:', val);
+                setTimeout(_ => {
+                    if (val.indexOf('监测点') > -1 && !this.options[0].shuxing.length) {
+                        this.options[0].shuxing = [{
+                            label: 'TH1'
+                        }];
+                    } else if (val.indexOf('监测时间') > -1 && !this.options[1].shuxing.length) {
+                        this.options[1].shuxing = [{
+                            label: '2018.1'
+                        }];
+                    }else if (val.indexOf('单项指标') > -1 && !this.options[1].shuxing.length) {
+                        console.log("tableData: "+this.tableData)
+                        this.options[2].shuxing = [
+                            {
+                                label: 'test'
+                            }
+                        ]
+                    }
+                }, 300);
             }
         },
     }

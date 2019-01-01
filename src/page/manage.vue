@@ -6,20 +6,21 @@
 					<el-menu-item index="manage"><i class="el-icon-menu"></i>首页</el-menu-item>
 					<el-submenu index="2">
 						<template slot="title"><i class="el-icon-document"></i>数据显示</template>
-						<el-menu-item index="userList">水生生物底栖密度</el-menu-item>
-                        <el-menu-item index="userList">水生生物底栖生物量</el-menu-item>
-						<el-menu-item index="shopList">水生生物浮游动物密度</el-menu-item>
-						<el-menu-item index="adminList">水生浮游植物</el-menu-item>
+						<el-menu-item index="fyzwlist">水生浮游植物</el-menu-item>
+                        <el-menu-item index="fydwlist">水生浮游动物</el-menu-item>
+						<el-menu-item index="wswqllist">微生物群落</el-menu-item>
+						<el-menu-item index="dqlist">水生生物底栖</el-menu-item>
+                        <el-menu-item index="dnsjlist">底泥数据</el-menu-item>
 					</el-submenu>
-					<el-submenu index="3">
-						<template slot="title"><i class="el-icon-plus"></i>数据管理</template>
-                        <el-menu-item index="addGoods">新增数据</el-menu-item>
-						<el-menu-item index="addShop">修改数据</el-menu-item>
-						<el-menu-item index="addGoods">删除数据</el-menu-item>
-					</el-submenu>
+					<!--<el-submenu index="3">-->
+						<!--<template slot="title"><i class="el-icon-plus"></i>数据管理</template>-->
+                        <!--<el-menu-item index="updateData">新增数据</el-menu-item>-->
+						<!--<el-menu-item index="updateData ">修改数据</el-menu-item>-->
+						<!--<el-menu-item index="addGoods">删除数据</el-menu-item>-->
+					<!--</el-submenu>-->
 					<el-submenu index="4">
 						<template slot="title"><i class="el-icon-star-on"></i>数据统计</template>
-						<el-menu-item index="visitor">指标数据统计</el-menu-item>
+						<el-menu-item index="statistic">指标数据统计</el-menu-item>
                         <el-menu-item index="visitor">采用点数据统计</el-menu-item>
                         <el-menu-item index="visitor">月度报表</el-menu-item>
                         <el-menu-item index="visitor">统计表下载</el-menu-item>

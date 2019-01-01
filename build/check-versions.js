@@ -8,7 +8,7 @@ function exec (cmd) {
 
 var versionRequirements = [
   {
-    name: 'node',
+    cyd: 'node',
     currentVersion: semver.clean(process.version),
     versionRequirement: packageConfig.engines.node
   },
@@ -16,7 +16,7 @@ var versionRequirements = [
 
 if (shell.which('npm')) {
   versionRequirements.push({
-    name: 'npm',
+    cyd: 'npm',
     currentVersion: exec('npm --version'),
     versionRequirement: packageConfig.engines.npm
   })
@@ -27,7 +27,7 @@ module.exports = function () {
   for (var i = 0; i < versionRequirements.length; i++) {
     var mod = versionRequirements[i]
     if (!semver.satisfies(mod.currentVersion, mod.versionRequirement)) {
-      warnings.push(mod.name + ': ' +
+      warnings.push(mod.cyd + ': ' +
         chalk.red(mod.currentVersion) + ' should be ' +
         chalk.green(mod.versionRequirement)
       )

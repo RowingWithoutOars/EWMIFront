@@ -13,7 +13,7 @@ module.exports = {
   },
   output: {
     path: config.build.assetsRoot,
-    filename: '[name].js',
+    filename: '[cyd].js',
     publicPath: process.env.NODE_ENV === 'production'
       ? config.build.assetsPublicPath
       : config.dev.assetsPublicPath
@@ -51,7 +51,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('img/[name].[hash:7].[ext]')
+          cyd: utils.assetsPath('img/[cyd].[hash:7].[ext]')
         }
       },
       {
@@ -59,7 +59,7 @@ module.exports = {
         loader: 'url-loader',
         options: {
           limit: 10000,
-          name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
+          cyd: utils.assetsPath('fonts/[cyd].[hash:7].[ext]')
         }
       }
     ]
