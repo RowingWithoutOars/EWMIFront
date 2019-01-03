@@ -4,6 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
+console.log(login)
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 
@@ -26,6 +27,7 @@ const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'a
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const map = r => require.ensure([], () => r(require('@/page/home/map')), 'map');
 
+
 const routes = [
 	{
 		path: '/',
@@ -43,47 +45,49 @@ const routes = [
             path: '/updateData',
             component: updateData,
             meta: ['修改数据', '修改数据'],
-		},{
-            path: '/updateData',
-            component: addData,
-            meta: ['添加数据', '添加商品'],
-        },{
-            path: '/fyzwlist',
-            component: fyzwlist,
-            meta: ['浮游植物', '浮游植物'],
-		},{
-            path: '/fydwlist',
-            component: fyzwlist,
-            meta: ['浮游动物', '浮游动物'],
-        },{
-            path: '/dqlist',
-            component: dqlist,
-            meta: ['底栖生物', '底栖生物'],
-        },{
-            path: '/wswqllist',
-            component: wswqllist,
-            meta: ['微生物群落', '微生物群落'],
-        },{
-            path: '/dnsjlist',
-            component: dnsjlist,
-            meta: ['底泥数据', '底泥数据'],
-        },{
-			path: '/visitor',
-			component: visitor,
-			meta: ['图表', '用户分布'],
-		},{
-            path: '/statistic',
-            component: statistic,
-            meta: ['图表', '用户分布'],
-        },{
-			path: '/adminSet',
-			component: adminSet,
-			meta: ['设置', '管理员设置'],
-		},{
-			path: '/explain',
-			component: explain,
-			meta: ['说明', '说明'],
-		}]
+		}
+		// ,{
+         //    path: '/updateData',
+         //    component: addData,
+         //    meta: ['添加数据', '添加商品'],
+        // },{
+         //    path: '/fyzwlist',
+         //    component: fyzwlist,
+         //    meta: ['浮游植物', '浮游植物'],
+		// },{
+         //    path: '/fydwlist',
+         //    component: fyzwlist,
+         //    meta: ['浮游动物', '浮游动物'],
+        // },{
+         //    path: '/dqlist',
+         //    component: dqlist,
+         //    meta: ['底栖生物', '底栖生物'],
+        // },{
+         //    path: '/wswqllist',
+         //    component: wswqllist,
+         //    meta: ['微生物群落', '微生物群落'],
+        // },{
+         //    path: '/dnsjlist',
+         //    component: dnsjlist,
+         //    meta: ['底泥数据', '底泥数据'],
+        // },{
+		// 	path: '/visitor',
+		// 	component: visitor,
+		// 	meta: ['图表', '用户分布'],
+		// },{
+         //    path: '/statistic',
+         //    component: statistic,
+         //    meta: ['图表', '用户分布'],
+        // },{
+		// 	path: '/adminSet',
+		// 	component: adminSet,
+		// 	meta: ['设置', '管理员设置'],
+		// },{
+		// 	path: '/explain',
+		// 	component: explain,
+		// 	meta: ['说明', '说明'],
+		// }
+		]
 	}
 ]
 
