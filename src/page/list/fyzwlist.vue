@@ -192,7 +192,8 @@
             },
             // 数据筛选事件
             filterHandler(value, row, column) {
-
+                const property = column['property'];
+                return row[property] === value;
             },
             // 获取数据列表
             getlistSingleData(para){

@@ -4,7 +4,7 @@ import Router from 'vue-router'
 Vue.use(Router)
 
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
-console.log(login)
+
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 
@@ -26,7 +26,6 @@ const statistic = r => require.ensure([], () => r(require('@/page/statistic')), 
 const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'adminSet');
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const map = r => require.ensure([], () => r(require('@/page/home/map')), 'map');
-
 
 const routes = [
 	{
