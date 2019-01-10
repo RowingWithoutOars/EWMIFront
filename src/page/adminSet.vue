@@ -12,7 +12,13 @@
                 </el-table-column>
                 <el-table-column prop="username" label="用户名" sortable width="100">
                 </el-table-column>
-                <el-table-column prop="lb" label="用户类别"  sortable>
+                <el-table-column prop="fydw" label="浮游动物数据">
+                </el-table-column>
+                <el-table-column prop="fyzw" label="浮游植物数据"></el-table-column>
+                <el-table-column prop="dq" label="底栖数据"></el-table-column>
+                <el-table-column prop="wsw" label="微生物数据"></el-table-column>
+                <el-table-column prop="dn" label="底泥数据"></el-table-column>
+                <el-table-column prop="other" label="其他类型数据">
                 </el-table-column>
                 <el-table-column
                     label="操作"
@@ -31,8 +37,23 @@
                     <el-form-item label="用户名" prop="username">
                         <el-input v-model="editForm.username" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="用户类别" prop="lb">
-                        <el-input v-model="editForm.lb" :min="0" :max="200"></el-input>
+                    <el-form-item label="浮游动物数据" prop="fydw">
+                        <el-input v-model="editForm.fydw" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="浮游植物数据" prop="fyzw">
+                        <el-input v-model="editForm.fyzw" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="底栖数据" prop="dq">
+                        <el-input v-model="editForm.dq" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="微生物数据" prop="wsw">
+                        <el-input v-model="editForm.wsw" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="底泥数据" prop="dn">
+                        <el-input v-model="editForm.dn" auto-complete="off"></el-input>
+                    </el-form-item>
+                    <el-form-item label="其他数据" prop="other">
+                        <el-input v-model="editForm.other" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="用户密码" prop="userpd">
                         <el-input v-model="editForm.userpd" :min="0" :max="200"></el-input>
@@ -50,10 +71,25 @@
                         <el-input v-model="addForm.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="addForm.userpw"></el-input>
+                        <el-input v-model="addForm.userpd"></el-input>
                     </el-form-item>
-                    <el-form-item label="类别">
-                        <el-input v-model="addForm.lb"></el-input>
+                    <el-form-item label="浮游动物数据">
+                        <el-input v-model="addForm.fydw"></el-input>
+                    </el-form-item>
+                    <el-form-item label="浮游植物数据">
+                        <el-input v-model="addForm.fyzw"></el-input>
+                    </el-form-item>
+                    <el-form-item label="底栖数据">
+                        <el-input v-model="addForm.dq"></el-input>
+                    </el-form-item>
+                    <el-form-item label="微生物数据">
+                        <el-input v-model="addForm.wsw"></el-input>
+                    </el-form-item>
+                    <el-form-item label="底泥数据">
+                        <el-input v-model="addForm.dn"></el-input>
+                    </el-form-item>
+                    <el-form-item label="其他数据">
+                        <el-input v-model="addForm.other"></el-input>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -91,8 +127,13 @@
                 editForm: {
                     userid: 0,
                     username: '',
-                    lb: '',
-                    userpd: ''
+                    userpd: '',
+                    fydw: '',
+                    fyzw: '',
+                    dq: '',
+                    wsw: '',
+                    dn: '',
+                    other: ''
                 },
 
                 addFormVisible: false, // 新增界面是否显示
@@ -104,7 +145,12 @@
                 addForm: {
                     username: '',
                     userpd: '',
-                    lb: ''
+                    fydw: '',
+                    fyzw: '',
+                    dq: '',
+                    wsw: '',
+                    dn: '',
+                    other: ''
                 }
 
             }

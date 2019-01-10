@@ -1,139 +1,81 @@
 <template>
-  	<div class="login_page fillcontain">
-	  	<transition name="form-fade" mode="in-out">
-	  		<section class="form_contianer" v-show="showLogin">
-		  		<div class="manage_tip">
-		  			<p>EWMIS信息管理系统</p>
-		  		</div>
-		    	<el-form :model="loginForm" :rules="rules" ref="loginForm">
-					<el-form-item prop="username">
-						<el-input v-model="loginForm.username" placeholder="用户名"><span>dsfsf</span></el-input>
-					</el-form-item>
-					<el-form-item prop="password">
-						<el-input type="password" placeholder="密码" v-model="loginForm.password"></el-input>
-					</el-form-item>
-					<el-form-item>
-				    	<el-button type="primary" @click="submitForm('loginForm')" class="submit_btn">登陆</el-button>
-				  	</el-form-item>
-				</el-form>
-				<p class="tip">温馨提示：</p>
-				<p class="tip">未登录过的新用户，自动注册</p>
-				<p class="tip">注册过的用户可凭账号密码登录</p>
-	  		</section>
-	  	</transition>
-  	</div>
+    <el-form ref="AccountFrom" :model="account" :rules="rules" label-position="left" label-width="0px"
+             class="demo-ruleForm login-container">
+        <h3 class="title">系统登录</h3>
+        <el-form-item prop="username">
+            <el-input type="text" v-model="account.username" auto-complete="off" placeholder="账号"></el-input>
+        </el-form-item>
+        <el-form-item prop="pwd">
+            <el-input type="password" v-model="account.pwd" auto-complete="off" placeholder="密码"></el-input>
+        </el-form-item>
+        <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
+        <el-form-item style="width:100%;">
+            <el-button type="primary" style="width:100%;" @click.native.prevent="handleLogin" :loading="logining" >登录</el-button>
+        </el-form-item>
+    </el-form>
 </template>
 
 <script>
-	import {login, getAdminInfo} from '@/api/getData'
-	import {mapActions, mapState} from 'vuex'
+    import {requestLogin} from '../api/api'
+    export default {
+        data () {
+            return {
+                logining: false,
+                account: {
+                    username: 'test',
+                    pwd: 'test'
+                },
+                rules: {
+                    username: [
+                        {required: true, message: '请输入账号', trigger: 'blur'}
+                    ],
+                    pwd: [
+                        {required: true, message: '请输入密码', trigger: 'blur'}
+                    ]
+                },
+                checked: true
+            }
+        },
+        methods: {
+            handleLogin () {
+                this.$refs.AccountFrom.validate((valid) => {
+                    if (valid) {
+                        this.logining = true
+                        var loginParams = { username: this.account.username, password: this.account.pwd }
+                        requestLogin(loginParams).then(data => {
+                            this.logining = false
+                            console.log(data)
+                            let { code, userid } = data
+                            if (code === 200) {
+                                // 登录成功，把用户信息保存在sessionStorage中
+                                sessionStorage.setItem('userid', userid)
+                                // 跳转到主界面
+                                this.$router.push({ path: '/manage' })
+                            } else {
+                                this.$message({
+                                    message: '登录失败',
+                                    type: 'error'
+                                })
+                                // this.$router.push({ path: '/Register' })
+                            }
+                        })
+                    } else {
+                        console.log('error submit!!')
+                        return false
+                    }
+                })
+            }
+        }
+    }
 
-	export default {
-	    data(){
-			return {
-				loginForm: {
-					username: '',
-					password: '',
-				},
-				rules: {
-					username: [
-			            { required: true, message: '请输入用户名', trigger: 'blur' },
-			        ],
-					password: [
-						{ required: true, message: '请输入密码', trigger: 'blur' }
-					],
-				},
-				showLogin: false,
-			}
-		},
-		mounted(){
-			this.showLogin = true;
-			if (!this.adminInfo.id) {
-    			this.getAdminData()
-    		}
-		},
-		computed: {
-			...mapState(['adminInfo']),
-		},
-		methods: {
-			...mapActions(['getAdminData']),
-			async submitForm(formName) {
-				this.$refs[formName].validate(async (valid) => {
-					if (valid) {
-						const res = await login({username: this.loginForm.username, password: this.loginForm.password})
-						if (res.status == 1) {
-							this.$message({
-		                        type: 'success',
-		                        message: '登录成功'
-		                    });
-							this.$router.push('manage')
-						}else{
-							this.$message({
-		                        type: 'error',
-		                        message: res.message
-		                    });
-						}
-					} else {
-						this.$notify.error({
-							title: '错误',
-							message: '请输入正确的用户名密码',
-							offset: 100
-						});
-						return false;
-					}
-				});
-			},
-		},
-		watch: {
-			adminInfo: function (newValue){
-				if (newValue.id) {
-					this.$message({
-                        type: 'success',
-                        message: '检测到您之前登录过，将自动登录'
-                    });
-					this.$router.push('manage')
-				}
-			}
-		}
-	}
 </script>
 
-<style lang="less" scoped>
-	@import '../style/mixin';
-	.login_page{
-		background-color: #324057;
-	}
-	.manage_tip{
-		position: absolute;
-		width: 100%;
-		top: -100px;
-		left: 0;
-		p{
-			font-size: 34px;
-			color: #fff;
-		}
-	}
-	.form_contianer{
-		.wh(320px, 210px);
-		.ctp(320px, 210px);
-		padding: 25px;
-		border-radius: 5px;
-		text-align: center;
-		background-color: #fff;
-		.submit_btn{
-			width: 100%;
-			font-size: 16px;
-		}
-	}
-	.tip{
-		font-size: 12px;
-		color: red;
-	}
-	.form-fade-enter-active, .form-fade-leave-active {
-	  	transition: all 1s;
-	}
-	.form-fade-enter, .form-fade-leave-active {
-	  	transform: translate3d(0, -50px, 0);
-	  	opacity: 0;
-	}
+<style>
+    body{
+        background: #DFE9FB;
+    }
+    .login-container{
+        width:350px;
+        margin-left:35%;
+    }
 </style>

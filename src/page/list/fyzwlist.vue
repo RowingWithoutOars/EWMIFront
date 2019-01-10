@@ -130,7 +130,7 @@
                 count: 0,
                 currentPage: 1,
                 chaxunValue: '',
-                para:{"sxkey":"200"}
+                para:{"sxkey":"200","userid":"17"}
             }
         },
         components: {
@@ -138,6 +138,8 @@
         },
         created(){
            // this.getData();
+           //  let user = sessionStorage.getItem("user")
+            console.log(sessionStorage.getItem("userid"))
             this.getlistSingleData(this.para)
         },
         methods: {
@@ -213,7 +215,6 @@
                         console.log(this.jcd_time)
                         this.sxkey = sxkey
                         console.log("sxkey: " + this.sxkey)
-                        sessionStorage.setItem(200, result)
                     })
             },
             handleChange(value){
