@@ -27,7 +27,7 @@
             handleChaxun() {
                 console.log(this.value5)
                 console.log(this.value11)
-                location.href="http://localhost:8080/data/excel/export?value5="+this.value5+"&value11="+this.value11;
+                location.href="http://localhost:8080/EWMIS/data/excel/export?value5="+this.value5+"&value11="+this.value11;
             }
         },
         data() {
