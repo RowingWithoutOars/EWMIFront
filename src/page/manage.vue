@@ -6,30 +6,24 @@
 					<el-menu-item index="manage"><i class="el-icon-menu"></i>首页</el-menu-item>
 					<el-submenu index="2">
 						<template slot="title"><i class="el-icon-document"></i>数据显示</template>
-						<el-menu-item index="fyzwlist">水生浮游植物</el-menu-item>
-                        <el-menu-item index="fydwlist">水生浮游动物</el-menu-item>
-						<el-menu-item index="wswqllist">微生物群落</el-menu-item>
-						<el-menu-item index="dqlist">水生生物底栖</el-menu-item>
-                        <el-menu-item index="dnsjlist">底泥数据</el-menu-item>
+						<el-menu-item index="fyzwlist">水生浮游植物密度</el-menu-item>
+                        <el-menu-item index="fyzwswllist">水生浮游植物生物量</el-menu-item>
+                        <el-menu-item index="fydwlist">水生浮游动物密度</el-menu-item>
+                        <el-menu-item index="fydwswllist">水生浮游动物生物量</el-menu-item>
+                        <el-menu-item index="dqlist">水生底栖生物密度</el-menu-item>
+                        <el-menu-item index="dqswllist">水生底栖生物生物量</el-menu-item>
+                        <el-menu-item index="xkwwswlist">胥口湾微生物数据</el-menu-item>
+                        <el-menu-item index="xkwdnlist">胥口湾底泥数据</el-menu-item>
+                        <el-menu-item index="szsjlist">水质数据</el-menu-item>
 					</el-submenu>
-					<!--<el-submenu index="3">-->
-						<!--<template slot="title"><i class="el-icon-plus"></i>数据管理</template>-->
-                        <!--<el-menu-item index="updateData">新增数据</el-menu-item>-->
-						<!--<el-menu-item index="updateData ">修改数据</el-menu-item>-->
-						<!--<el-menu-item index="addGoods">删除数据</el-menu-item>-->
-					<!--</el-submenu>-->
 					<el-submenu index="4">
 						<template slot="title"><i class="el-icon-star-on"></i>数据统计</template>
 						<el-menu-item index="statistic">指标数据统计</el-menu-item>
-                        <el-menu-item index="visitor">采用点数据统计</el-menu-item>
-                        <el-menu-item index="visitor">月度报表</el-menu-item>
-                        <el-menu-item index="visitor">统计表下载</el-menu-item>
-						<!-- <el-menu-item index="newMember">用户数据</el-menu-item> -->
+                        <el-menu-item index="visitor">月度报表下载</el-menu-item>
 					</el-submenu>
 					<el-submenu index="6">
 						<template slot="title"><i class="el-icon-setting"></i>权限设置</template>
 						<el-menu-item index="adminSet">管理员设置</el-menu-item>
-						<!-- <el-menu-item index="sendMessage">发送通知</el-menu-item> -->
 					</el-submenu>
 					<el-submenu index="7">
 						<template slot="title"><i class="el-icon-warning"></i>说明</template>

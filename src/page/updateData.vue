@@ -5,20 +5,31 @@
             <el-col :span="14" :offset="4">
                 <header class="form_header">修改数据 </header>
                 <el-form :model="dataForm" ref="dataForm" label-width="110px" class="form data_form">
+                    <el-select v-model="dataForm.value1" placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-form-item label="采样点编号" prop="name2">
+                        <el-input v-model="dataForm.cyd_bh"></el-input>
+                    </el-form-item>
                     <el-form-item label="采样点" prop="name">
                         <el-input v-model="dataForm.cyd"></el-input>
                     </el-form-item>
                     <el-form-item label="采样时间" prop="activity">
-                        <el-input v-model="dataForm.sxkey"></el-input>
+                        <el-input v-model="dataForm.jcd_time"></el-input>
                     </el-form-item>
                     <el-form-item label="生物" prop="description">
-                        <el-input v-model="dataForm.jcd_time"></el-input>
+                        <el-input v-model="dataForm.sxkey"></el-input>
                     </el-form-item>
                     <el-form-item label="生物数量">
                         <el-input v-model="dataForm.number"></el-input>
                     </el-form-item>
                     <el-form-item>
-                        <el-button type="primary" @click="updateData('dataForm')">确认添加</el-button>
+                        <el-button type="primary" @click="updateData('dataForm')">确认修改</el-button>
                     </el-form-item>
                 </el-form>
             </el-col>
@@ -27,18 +38,30 @@
 </template>
 
 <script>
-    import headTop from '@/components/headTop'
-    import {getCategory, addCategory, addFood} from '@/api/getData'
+    import headTop from '../components/headTop'
+    import {updateData} from '../api/api'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
         data(){
             return {
+                options: [{
+                    value: '密度',
+                    label: '密度'
+                }, {
+                    value: '生物量',
+                    label: '生物量'
+                }],
+                value1: '',
+
                 dataForm: {
+                    cyd_bh:'',
                     cyd: '',
                     jcd_time: '',
                     sxkey: '',
-                    number: 0,
+                    number:'',
+                    value1:'',
                 },
+
             }
         },
         components: {
@@ -52,18 +75,19 @@
                             ...this.dataForm,
                         }
                         try{
-                            const result = await addFood(params);
+                            const result = await updateData(params);
                             if (result.status == 1) {
                                 console.log(result)
                                 this.$message({
                                     type: 'success',
-                                    message: '添加成功'
+                                    message: '修改成功'
                                 });
                                 this.dataForm = {
                                     cyd: '',
-                                    jcd_time: '',
                                     sxkey: '',
+                                    jcd_time: '',
                                     number: 0,
+                                    value1:'',
                                 }
                             }else{
                                 this.$message({

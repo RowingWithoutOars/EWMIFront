@@ -62,13 +62,13 @@
                     label="数量">
                 </el-table-column>
                 <el-table-column
-                    label="操作"
-                    width="150">
-                    <template slot-scope="scope">
-                        <el-button size="small" @click="updateData(scope.$index, scope.row)">编辑</el-button>
-                        <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-                    </template>
-                </el-table-column>
+                label="操作"
+                width="150">
+                <template slot-scope="scope">
+                    <el-button size="small" @click="updateData(scope.$index, scope.row)">编辑</el-button>
+                    <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
+                </template>
+            </el-table-column>
             </el-table>
             <div class="Pagination" style="text-align: left;margin-top: 10px;">
                 <el-pagination
@@ -110,7 +110,8 @@
                     sxkey:"生物",
                     value:0.0
                 }],
-                datalist: [],
+                datalist: [
+                ],
                 jcd_time:[
                     {text: '2018-01', value: '2018-01'}],
                 jcd:[
@@ -130,18 +131,15 @@
                 count: 0,
                 currentPage: 1,
                 chaxunValue: '',
-                listLoading: false,
-                para:{"lb":"100","userid":sessionStorage.getItem("userid")}
+                para:{"lb":"600","userid":sessionStorage.getItem("userid")}
             }
         },
         components: {
             headTop,
         },
         created(){
-            // this.getData();
-            //  let user = sessionStorage.getItem("user")
-            //  console.log(sessionStorage.getItem("userid"))
-            this.listLoading = true
+           // this.getData();
+            console.log("para:"+this.para.sxkey)
             this.getlistSingleData(this.para)
         },
         methods: {
@@ -158,33 +156,29 @@
             },
             // 删除事件
             handleDel(index, row){
-                this.$router.push({ path: 'delData'})
+                this.$router.push({ path: 'updateData'})
             },
             // 查询事件
             handleChaxun(){
                 this.currentPage = 1
-                this.para = {"chaxun":this.chaxunValue,"lb":100,"userid":sessionStorage.getItem("userid")}
-                if (this.datalist!=null){
-                    listSingleData(this.para).then((result) => {
-                        let {data, jcd, jcd_time, sxkey} = result
-                        console.log("data:",data)
-                        this.datalist = data
-                        this.count = this.datalist.length
-                        // console.log(this.count,this.offset,this.limit,this.currentPage)
-                        console.log("页数："+this.currentPage)
-                        this.datalist = this.datalist.slice((this.currentPage-1)*this.limit, (this.currentPage)*this.limit)
-                        console.log("jcd:",jcd)
-                        this.jcd = jcd
-                        console.log(this.jcd)
-                        console.log(this.jcd_time)
-                        this.jcd_time = jcd_time
-                        console.log(this.jcd_time)
-                        this.sxkey = sxkey
-                        console.log("sxkey: " + this.sxkey)
-                    })
-                }else{
-                    this.$message.error('权限不足')
-                }
+                this.para = {"chaxun":this.chaxunValue,"lb":"600","userid":sessionStorage.getItem("userid")}
+                listSingleData(this.para).then((result) => {
+                    let {data, jcd, jcd_time, sxkey} = result
+                    console.log(data)
+                    this.datalist = data
+                    this.count = this.datalist.length
+                    // console.log(this.count,this.offset,this.limit,this.currentPage)
+                    console.log("页数："+this.currentPage)
+                    this.datalist = this.datalist.slice((this.currentPage-1)*this.limit, (this.currentPage)*this.limit)
+                    console.log(jcd)
+                    this.jcd = jcd
+                    console.log(this.jcd)
+                    console.log(this.jcd_time)
+                    this.jcd_time = jcd_time
+                    console.log(this.jcd_time)
+                    this.sxkey = sxkey
+                    console.log("sxkey: " + this.sxkey)
+                })
             },
             // 分页设置
             handleCurrentChange(val) {
@@ -205,24 +199,27 @@
             },
             // 获取数据列表
             getlistSingleData(para){
-                // let para = {"sxkey":"200"}
-                listSingleData(para).then((result) => {
-                    let {data, jcd, jcd_time, sxkey} = result
-                    console.log(data)
-                    this.datalist = data
-                    this.count = this.datalist.length
-                    console.log(this.count,this.offset,this.limit,this.currentPage)
-                    this.datalist = this.datalist.slice((this.currentPage-1)*this.limit, (this.currentPage)*this.limit)
-                    console.log(jcd)
-                    this.jcd = jcd
-                    console.log(this.jcd)
-                    console.log(this.jcd_time)
-                    this.jcd_time = jcd_time
-                    console.log(this.jcd_time)
-                    this.sxkey = sxkey
-                    console.log("sxkey: " + this.sxkey)
-                    this.listLoading = false
-                })
+                    listSingleData(para).then((result) => {
+                        let {data, jcd, jcd_time, sxkey} = result
+                        console.log(data)
+                        this.datalist = data
+                        this.count = this.datalist.length
+                        console.log(this.count,this.offset,this.limit,this.currentPage)
+                        this.datalist = this.datalist.slice((this.currentPage-1)*this.limit, (this.currentPage)*this.limit)
+                        console.log(jcd)
+                        this.jcd = jcd
+                        console.log(this.jcd)
+                        console.log(this.jcd_time)
+                        this.jcd_time = jcd_time
+                        console.log(this.jcd_time)
+                        this.sxkey = sxkey
+                        console.log("sxkey: " + this.sxkey)
+                        sessionStorage.setItem(200, result)
+                    })
+                // listData().then((result) => {
+                //     console.log(result)
+                // })
+
             },
             handleChange(value){
                 this.chaxunValue = value[1]

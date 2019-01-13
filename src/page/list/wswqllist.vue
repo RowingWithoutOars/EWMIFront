@@ -11,6 +11,7 @@
                             @active-item-change="handleItemChange"
                             :show-all-levels="false"
                             :props="props"
+                            @change="handleChange"
                         ></el-cascader>
                     </el-form-item>
                     <el-form-item>
@@ -23,48 +24,41 @@
             </el-col>
         </div>
         <div class="table_container">
-            <el-table
-                :data="tableData"
-                highlight-current-row
-                style="width: 100%">
+            <el-table :data="datalist" highlight-current-row v-loading="listLoading" style="width: 100%;">
                 <el-table-column
                     type="index"
                     width="100">
                 </el-table-column>
                 <el-table-column
-                    prop="jcd"
+                    prop="cydw"
                     label="监测点"
                     sortable
                     width="180"
-                    column-key="jcd_time"
+                    column-key="cydw"
                     :filters=jcd
                     :filter-method="filterHandler"
-                >
-                </el-table-column>
+                ></el-table-column>
                 <el-table-column
-                    prop="jcd_time"
+                    prop="riqi"
                     label="日期"
                     sortable
                     width="180"
-                    column-key="jcd_time"
+                    column-key="riqi"
                     :filters=jcd_time
                     :filter-method="filterHandler"
                 >
                 </el-table-column>
-
                 <el-table-column
-                    prop="key"
+                    prop="sxkey"
                     label="生物"
                     sortable
                     width="180"
-                    column-key="key"
-                    :filters=shengwu
-                    :filter-method="filterHandler"
-                >
+                    column-key="sxkey"
+                    :filters=sxkey
+                    :filter-method="filterHandler">
                 </el-table-column>
-
                 <el-table-column
-                    property="value"
+                    property="sxvalue"
                     label="数量">
                 </el-table-column>
                 <el-table-column
@@ -86,14 +80,13 @@
                     :total="count">
                 </el-pagination>
             </div>
-
         </div>
     </div>
 </template>
 
 <script>
     import headTop from '../../components/headTop'
-    import {getUserList, getUserCount} from '@/api/getData'
+    import {listData,listSingleData} from '../../api/api'
     export default {
         data(){
             return {
@@ -112,90 +105,130 @@
                     children:'shuxing'
                 },
                 tableData: [{
-                    jcd:"",
-                    jcd_time:"",
-                    sxkey:"",
+                    cydw:"监测地",
+                    riqi:"监测时间",
+                    sxkey:"生物",
                     value:0.0
                 }],
+                datalist: [],
                 jcd_time:[
-                    {text: '2018-01', value: '2018-01'},
-                    {text: '2018-02', value: '2018-02'},
-                    {text: '2018-03', value: '2018-03'},
-                    {text: '2018-04', value: '2018-04'}],
+                    {text: '2018-01', value: '2018-01'}],
                 jcd:[
-                    {text: 'TH1', value: 'TH1'},
-                    {text: 'TH2', value: 'TH2'},
-                    {text: 'TH3', value: 'TH3'},
-                    {text: 'TH4', value: 'TH4'}],
+                    {text: 'TH1', value: 'TH1'}],
                 sxkey:[
-                    {text: 'A', value: 'A'},
-                    {text: 'B', value: 'B'},
-                    {text: 'C', value: 'C'},
-                    {text: 'D', value: 'D'}
+                    {text: 'A', value: 'A'}
                 ],
+                page: {
+                    pageNo: 1, // 当前页码
+                    pageSize: 10, // 每页显示行数
+                    totalRecords: 0, // 总条数
+                    totalPages: 0 // 总页数
+                },
                 currentRow: null,
                 offset: 0,
                 limit: 20,
                 count: 0,
                 currentPage: 1,
-                switch_value:true
+                chaxunValue: '',
+                listLoading: false,
+                para:{"lb":"600","userid":sessionStorage.getItem("userid")}
             }
         },
         components: {
             headTop,
         },
         created(){
-            this.initData();
+            // this.getData();
+            //  let user = sessionStorage.getItem("user")
+            //  console.log(sessionStorage.getItem("userid"))
+            this.listLoading = true
+            this.getlistSingleData(this.para)
         },
         methods: {
-            async initData(){
-                try{
-                    const countData = await getUserCount();
-                    if (countData.status == 1) {
-                        this.count = countData.count;
-                    }else{
-                        throw new Error('获取数据失败');
-                    }
-                    this.getData();
-                }catch(err){
-                    console.log('获取数据失败', err);
-                }
-            },
             handleSizeChange(val) {
                 console.log(`每页 ${val} 条`);
             },
-            updateData(index, row){
+            //事件
+            addData(index, row){
                 this.$router.push({ path: 'addData'})
             },
-            handleChaxun(){
-
-            },
+            // 更新事件
             updateData(index, row){
                 this.$router.push({ path: 'updateData'})
             },
+            // 删除事件
+            handleDel(index, row){
+                this.$router.push({ path: 'delData'})
+            },
+            // 查询事件
+            handleChaxun(){
+                this.currentPage = 1
+                this.para = {"chaxun":this.chaxunValue,"lb":600,"userid":sessionStorage.getItem("userid")}
+                if (this.datalist!=null){
+                    listSingleData(this.para).then((result) => {
+                        let {data, jcd, jcd_time, sxkey} = result
+                        console.log("data:",data)
+                        this.datalist = data
+                        this.count = this.datalist.length
+                        // console.log(this.count,this.offset,this.limit,this.currentPage)
+                        console.log("页数："+this.currentPage)
+                        this.datalist = this.datalist.slice((this.currentPage-1)*this.limit, (this.currentPage)*this.limit)
+                        console.log("jcd:",jcd)
+                        this.jcd = jcd
+                        console.log(this.jcd)
+                        console.log(this.jcd_time)
+                        this.jcd_time = jcd_time
+                        console.log(this.jcd_time)
+                        this.sxkey = sxkey
+                        console.log("sxkey: " + this.sxkey)
+                    })
+                }else{
+                    this.$message.error('权限不足')
+                }
+            },
+            // 分页设置
             handleCurrentChange(val) {
                 this.currentPage = val;
                 this.offset = (val - 1)*this.limit;
-                this.getData()
+                console.log(this.count,this.offset,this.limit,this.currentPage)
+                // this.getData()
+                this.getlistSingleData(this.para)
             },
+            // 清除所有的筛选器
             clearFilter() {
                 this.$refs.filterTable.clearFilter();
             },
+            // 数据筛选事件
             filterHandler(value, row, column) {
                 const property = column['property'];
                 return row[property] === value;
             },
-            async getData(){
-                const Users = await getUserList({offset: this.offset, limit: this.limit});
-                this.tableData = [];
-                Users.forEach(item => {
-                    const tableData = {};
-                    tableData.jcd = item.jcd;
-                    tableData.registe_time = item.registe_time;
-                    tableData.city = item.city;
-                    this.tableData.push(tableData);
+            // 获取数据列表
+            getlistSingleData(para){
+                // let para = {"sxkey":"200"}
+                listSingleData(para).then((result) => {
+                    let {data, jcd, jcd_time, sxkey} = result
+                    console.log(data)
+                    this.datalist = data
+                    this.count = this.datalist.length
+                    console.log(this.count,this.offset,this.limit,this.currentPage)
+                    this.datalist = this.datalist.slice((this.currentPage-1)*this.limit, (this.currentPage)*this.limit)
+                    console.log(jcd)
+                    this.jcd = jcd
+                    console.log(this.jcd)
+                    console.log(this.jcd_time)
+                    this.jcd_time = jcd_time
+                    console.log(this.jcd_time)
+                    this.sxkey = sxkey
+                    console.log("sxkey: " + this.sxkey)
+                    this.listLoading = false
                 })
             },
+            handleChange(value){
+                this.chaxunValue = value[1]
+                console.log(this.chaxunValue)
+            },
+            // 查询树事件
             handleItemChange(val) {
                 setTimeout(_ => {
                     if (val.indexOf('监测点') > -1 && !this.options[0].shuxing.length) {

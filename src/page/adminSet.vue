@@ -3,6 +3,7 @@
     <div class="fillcontain">
         <head-top></head-top>
         <div class="table_container">
+            <el-button size="small" @click="handleAdd">新增</el-button>
             <el-table :data="users" highlight-current-row v-loading="listLoading" style="width: 100%;">
                 <el-table-column
                     type="index"
@@ -24,7 +25,6 @@
                     label="操作"
                     width="240">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleAdd">新增</el-button>
                         <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                         <el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
                     </template>
@@ -71,7 +71,7 @@
                         <el-input v-model="addForm.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
-                        <el-input v-model="addForm.userpd"></el-input>
+                        <el-input v-model="addForm.userpw"></el-input>
                     </el-form-item>
                     <el-form-item label="浮游动物数据">
                         <el-input v-model="addForm.fydw"></el-input>
@@ -127,7 +127,7 @@
                 editForm: {
                     userid: 0,
                     username: '',
-                    userpd: '',
+                    userpw: '',
                     fydw: '',
                     fyzw: '',
                     dq: '',
@@ -144,7 +144,7 @@
                 // 新增界面数据
                 addForm: {
                     username: '',
-                    userpd: '',
+                    userpw: '',
                     fydw: '',
                     fyzw: '',
                     dq: '',
@@ -163,21 +163,20 @@
             },
             // 获取用户列表
             getUsers () {
-                // let para = {
-                //     page: this.page,
-                //     name: this.filters.name,
-                //     stores_num: 10000
-                // }
-                this.listLoading = true
+                // this.listLoading = true
+                if (sessionStorage.getItem("userid")==1) {
+                    this.listLoading = true
+                    listUsers().then((result) => {
+                        console.log(result)
+                        let { data } = result
+                        console.log(data)
+                        this.users = data
+                        this.listLoading = false
+                        // NProgress.done();
+                    })
+                }
                 // NProgress.start();
-                listUsers().then((result) => {
-                    console.log(result)
-                    let { data } = result
-                    console.log(data)
-                    this.users = data
-                    this.listLoading = false
-                    // NProgress.done();
-                })
+
             },
             // 删除
             handleDel: function (index, row) {

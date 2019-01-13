@@ -5,14 +5,25 @@
             <el-col :span="14" :offset="4">
                 <header class="form_header">添加数据 </header>
                 <el-form :model="dataForm" ref="dataForm" label-width="110px" class="form data _form">
+                    <el-select v-model="dataForm.value1" placeholder="请选择">
+                        <el-option
+                            v-for="item in options"
+                            :key="item.value"
+                            :label="item.label"
+                            :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <el-form-item label="记录编号" prop="name">
+                        <el-input v-model="dataForm.cyd_bh"></el-input>
+                    </el-form-item>
                     <el-form-item label="采样点" prop="name">
                         <el-input v-model="dataForm.cyd"></el-input>
                     </el-form-item>
                     <el-form-item label="采样时间" prop="activity">
-                        <el-input v-model="dataForm.sxkey"></el-input>
+                        <el-input v-model="dataForm.jcd_time"></el-input>
                     </el-form-item>
                     <el-form-item label="生物" prop="description">
-                        <el-input v-model="dataForm.jcd_time"></el-input>
+                        <el-input v-model="dataForm.sxkey"></el-input>
                     </el-form-item>
                     <el-form-item label="生物数量">
                         <el-input v-model="dataForm.number"></el-input>
@@ -27,17 +38,28 @@
 </template>
 
 <script>
-    import headTop from '@/components/headTop'
-    import {getCategory, addCategory, addFood} from '@/api/getData'
+    import headTop from '../components/headTop'
+    import {addData} from '../api/api'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
         data(){
             return {
+                options: [{
+                    value: '密度',
+                    label: '密度'
+                }, {
+                    value: '生物量',
+                    label: '生物量'
+                }],
+                value1: '',
+
                 dataForm: {
+                    cyd_bh:'',
                     cyd: '',
                     jcd_time: '',
                     sxkey: '',
-                    number: 0,
+                    number: '',
+                    value1:'',
                 },
             }
         },
@@ -50,14 +72,14 @@
             }
         },
         methods: {
-            updateData(dataForm){
+            addData(dataForm){
                 this.$refs[dataForm].validate(async (valid) => {
                     if (valid) {
                         const params = {
                             ...this.dataForm,
                         }
                         try{
-                            const result = await addFood(params);
+                            const result = await addData(params);
                             if (result.status == 1) {
                                 console.log(result)
                                 this.$message({
@@ -65,10 +87,12 @@
                                     message: '添加成功'
                                 });
                                 this.dataForm = {
+                                    cyd_bh: '',
                                     cyd: '',
                                     jcd_time: '',
                                     sxkey: '',
-                                    number: 0,
+                                    number: '',
+                                    value1:'',
                                 }
                             }else{
                                 this.$message({

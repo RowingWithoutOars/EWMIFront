@@ -7,9 +7,42 @@ export const listData = params => {
         res => res.data
     )
 }
+export const listData2 = params => {
+    return axios.post('/zbdata/listData', params).then(
+        res => res.data
+    )
+}
 
 export const listSingleData = params => {
     return axios.post('/data/listSingleData', params).then(
+        res => res.data
+    )
+}
+
+export const listSingleData2 = params => {
+    console.log("params:"+params)
+    return axios.post('/zbdata/listSingleData', params).then(
+        res => res.data
+    )
+}
+
+export const addData = params => {
+    console.log("params:"+params)
+    return axios.post('/data/addData', params).then(
+        res => res.data
+    )
+}
+
+export const delData = params => {
+    console.log("params:"+params)
+    return axios.post('/data/delData', params).then(
+        res => res.data
+    )
+}
+
+export const updateData = params => {
+    console.log("params:"+params)
+    return axios.post('/data/updateData', params).then(
         res => res.data
     )
 }
@@ -46,6 +79,12 @@ export const updateuser = params => {
 
 export const requestLogin = params => {
     return axios.post('/user/login', params).then(
+        res => res.data
+    )
+}
+
+export const exportExcel = params => {
+    return axios.post('/data/excel/export', params).then(
         res => res.data
     )
 }

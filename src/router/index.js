@@ -9,14 +9,25 @@ const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manag
 const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 
 const updateData = r => require.ensure([], () => r(require('@/page/updateData')), 'updateData');
-const addData = r => require.ensure([], () => r(require('@/page/updateData')), 'addData');
+const addData = r => require.ensure([], () => r(require('@/page/addData')), 'addData');
+const deleData = r=> require.ensure([], () => r(require('@/page/deleData')), 'deleData');
 
 
-const dnsjlist = r => require.ensure([], () => r(require('@/page/list/dnsjlist')), 'dnsjlist');
-const dqlist = r => require.ensure([], () => r(require('@/page/list/dqlist')), 'dqlist');
-const fydwlist = r => require.ensure([], () => r(require('@/page/list/fydwlist')), 'fydwlist');
 const fyzwlist = r => require.ensure([], () => r(require('@/page/list/fyzwlist')), 'fyzwlist');
-const wswqllist = r => require.ensure([], () => r(require('@/page/list/wswqllist')), 'wswqllist');
+const fyzwswllist = r => require.ensure([], () => r(require('@/page/list/fyzwswllist')), 'fyzwswllist');
+
+const fydwlist = r => require.ensure([], () => r(require('@/page/list/fydwlist')), 'fydwlist');
+const fydwswllist = r => require.ensure([], () => r(require('@/page/list/fydwswllist')), 'fydwswllist');
+
+const dqlist = r => require.ensure([], () => r(require('@/page/list/dqlist')), 'dqlist');
+const dqswllist = r => require.ensure([], () => r(require('@/page/list/dqswllist')), 'dqswllist');
+
+
+const xkwwswlist = r => require.ensure([], () => r(require('@/page/list/xkwwswlist')), 'xkwwswlist');
+const xkwdnlist = r => require.ensure([], () => r(require('@/page/list/xkwdnlist')), 'xkwdnlist');
+
+// const dnsjlist = r => require.ensure([], () => r(require('@/page/list/dnsjlist')), 'dnsjlist');
+const szsjlist = r => require.ensure([], () => r(require('@/page/list/szsjlist')), 'szsjlist');
 
 
 
@@ -42,57 +53,72 @@ const routes = [
             component: home,
             meta: [],
 		},{
-            path: '/updateData',
-            component: updateData,
-            meta: ['修改数据', '修改数据'],
-		}
-		,{
-            path: '/updateData',
-            component: addData,
-            meta: ['添加数据', '添加商品'],
-        },{
             path: '/fyzwlist',
             component: fyzwlist,
             // meta: ['浮游植物', '浮游植物'],
-		},{
+		},
+        {
+            path: '/fyzwswllist',
+            component: fyzwswllist,
+            // meta: ['浮游植物', '浮游植物'],
+        },{
             path: '/fydwlist',
-            component: fyzwlist,
+            component: fydwlist,
+            // meta: ['浮游动物', '浮游动物'],
+        },{
+            path: '/fydwswllist',
+            component: fydwswllist,
             // meta: ['浮游动物', '浮游动物'],
         },{
             path: '/dqlist',
             component: dqlist,
             // meta: ['底栖生物', '底栖生物'],
         },{
-            path: '/wswqllist',
-            component: wswqllist,
-            // meta: ['微生物群落', '微生物群落'],
+            path: '/dqswllist',
+            component: dqswllist,
+            // meta: ['底栖生物', '底栖生物'],
         },{
-            path: '/dnsjlist',
-            component: dnsjlist,
-            // meta: ['底泥数据', '底泥数据'],
+            path: '/xkwwswlist',
+            component: xkwwswlist,
+            // meta: ['胥口湾微生物数据', '胥口湾微生物数据'],
+        }, {
+            path: '/xkwdnlist',
+            component: xkwdnlist,
+            // meta: ['胥口湾底泥数据', '胥口湾底泥数据'],
         },{
+            path: '/szsjlist',
+            component: szsjlist,
+            // meta: ['胥口湾底泥数据', '胥口湾底泥数据'],
+        }, {
 			path: '/visitor',
 			component: visitor,
-			meta: ['图表', '用户分布'],
+			// meta: ['图表', '用户分布'],
 		},{
             path: '/statistic',
             component: statistic,
-            meta: ['图表', '统计'],
+            // meta: ['图表', '统计'],
         },
-        // {
-        //     path: '/minChart',
-        //     component: minChart,
-        //     meta: ['图表', '用户分布'],
-        // },
         {
 			path: '/adminSet',
 			component: adminSet,
-			meta: ['设置', '管理员设置'],
+			// meta: ['设置', '管理员设置'],
 		},{
 			path: '/explain',
 			component: explain,
-			meta: ['说明', '说明'],
-		}
+			// meta: ['说明', '说明'],
+		}, {
+        path: '/addData',
+        component: addData,
+        meta: ['增加', '增加'],
+        }, {
+            path: '/updateData',
+            component: updateData,
+            meta: ['修改', '修改'],
+        }, {
+            path: '/delData',
+            component: deleData,
+            meta: ['删除', '删除'],
+        }
 		]
 	}
 ]
