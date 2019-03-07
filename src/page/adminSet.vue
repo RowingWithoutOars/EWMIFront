@@ -9,12 +9,12 @@
                     type="index"
                     width="100">
                 </el-table-column>
-                <el-table-column prop="userid" label="编号" sortable>
+                <el-table-column prop="userid" width="100" label="编号" sortable>
                 </el-table-column>
                 <el-table-column prop="username" label="用户名" sortable width="100">
                 </el-table-column>
-                <el-table-column prop="fydw" label="浮游动物数据">
-                </el-table-column>
+                <el-table-column prop="phone" width="150" label="联系方式"></el-table-column>
+                <el-table-column prop="fydw" label="浮游动物数据"></el-table-column>
                 <el-table-column prop="fyzw" label="浮游植物数据"></el-table-column>
                 <el-table-column prop="dq" label="底栖数据"></el-table-column>
                 <el-table-column prop="wsw" label="微生物数据"></el-table-column>
@@ -33,30 +33,72 @@
 
             <!--编辑界面-->
             <el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
-                <el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
+                <el-form :model="editForm" label-width="100px" :rules="editFormRules" ref="editForm">
                     <el-form-item label="用户名" prop="username">
-                        <el-input v-model="editForm.username" auto-complete="off"></el-input>
+                        <el-input disabled="false" v-model="editForm.username" auto-complete="off"></el-input>
                     </el-form-item>
-                    <el-form-item label="浮游动物数据" prop="fydw">
-                        <el-input v-model="editForm.fydw" auto-complete="off"></el-input>
+                    <el-form-item>浮游动物数据
+                        <el-select v-model="editForm.fydw" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="浮游植物数据" prop="fyzw">
-                        <el-input v-model="editForm.fyzw" auto-complete="off"></el-input>
+                    <el-form-item>浮游植物数据
+                        <el-select v-model="editForm.fyzw" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="底栖数据" prop="dq">
-                        <el-input v-model="editForm.dq" auto-complete="off"></el-input>
+                    <el-form-item>底栖数据
+                        <el-select v-model="editForm.dq" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="微生物数据" prop="wsw">
-                        <el-input v-model="editForm.wsw" auto-complete="off"></el-input>
+                    <el-form-item>微生物数据
+                        <el-select v-model="editForm.wsw" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="底泥数据" prop="dn">
-                        <el-input v-model="editForm.dn" auto-complete="off"></el-input>
+                    <el-form-item>底泥数据
+                        <el-select v-model="editForm.dn" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="其他数据" prop="other">
-                        <el-input v-model="editForm.other" auto-complete="off"></el-input>
+                    <el-form-item>其他数据
+                        <el-select v-model="editForm.other" placeholder="请选择">
+                            <el-option
+                                v-for="item in options"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                            </el-option>
+                        </el-select>
                     </el-form-item>
-                    <el-form-item label="用户密码" prop="userpd">
-                        <el-input v-model="editForm.userpd" :min="0" :max="200"></el-input>
+                    <el-form-item>
+                        Tips: 0:不可浏览该类属性； 1: 仅可浏览该类属性 2: 可操作该类属性
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -66,30 +108,30 @@
             </el-dialog>
 
             <el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
-                <el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
+                <el-form :model="addForm" label-width="100px" :rules="addFormRules" ref="addForm">
                     <el-form-item label="用户名" prop="name">
                         <el-input v-model="addForm.username" auto-complete="off"></el-input>
                     </el-form-item>
                     <el-form-item label="密码">
                         <el-input v-model="addForm.userpw"></el-input>
                     </el-form-item>
-                    <el-form-item label="浮游动物数据">
-                        <el-input v-model="addForm.fydw"></el-input>
+                    <el-form-item label="浮游动物数据" prop="fydw">
+                        <el-input-number v-model="editForm.fydw" @change="handleChange" :min="0" :max="1" label="0表示无此项权限，1表示有此项权限"></el-input-number>
                     </el-form-item>
-                    <el-form-item label="浮游植物数据">
-                        <el-input v-model="addForm.fyzw"></el-input>
+                    <el-form-item label="浮游植物数据" prop="fyzw">
+                        <el-input-number v-model="editForm.fyzw" @change="handleChange" :min="0" :max="1" label="0表示无此项权限，1表示有此项权限"></el-input-number>
                     </el-form-item>
-                    <el-form-item label="底栖数据">
-                        <el-input v-model="addForm.dq"></el-input>
+                    <el-form-item label="底栖数据" prop="dq">
+                        <el-input-number v-model="editForm.dq" @change="handleChange" :min="0" :max="1" label="0表示无此项权限，1表示有此项权限"></el-input-number>
                     </el-form-item>
-                    <el-form-item label="微生物数据">
-                        <el-input v-model="addForm.wsw"></el-input>
+                    <el-form-item label="微生物数据" prop="wsw">
+                        <el-input-number v-model="editForm.wsw" @change="handleChange" :min="0" :max="1" label="0表示无此项权限，1表示有此项权限"></el-input-number>
                     </el-form-item>
-                    <el-form-item label="底泥数据">
-                        <el-input v-model="addForm.dn"></el-input>
+                    <el-form-item label="底泥数据" prop="dn">
+                        <el-input-number v-model="editForm.dn" @change="handleChange" :min="0" :max="1" label="0表示无此项权限，1表示有此项权限"></el-input-number>
                     </el-form-item>
-                    <el-form-item label="其他数据">
-                        <el-input v-model="addForm.other"></el-input>
+                    <el-form-item label="其他数据" prop="other">
+                        <el-input-number v-model="editForm.other" @change="handleChange" :min="0" :max="1" label="0表示无此项权限，1表示有此项权限"></el-input-number>
                     </el-form-item>
                 </el-form>
                 <div slot="footer" class="dialog-footer">
@@ -106,6 +148,16 @@
     export default {
         data: function () {
             return {
+                options: [{
+                    value: '0',
+                    label: '不可浏览此项数据'
+                }, {
+                    value: '1',
+                    label: '浏览该项数据'
+                }, {
+                    value: '2',
+                    label: '操作该项数据'
+                }],
                 filters: {
                     name: ''
                 },
@@ -156,7 +208,6 @@
             }
         },
         methods: {
-
             handleCurrentChange (val) {
                 this.page = val
                 this.getUsers()
@@ -164,7 +215,7 @@
             // 获取用户列表
             getUsers () {
                 // this.listLoading = true
-                if (sessionStorage.getItem("userid")==1) {
+                if (sessionStorage.getItem("userid")==2) {
                     this.listLoading = true
                     listUsers().then((result) => {
                         console.log(result)
@@ -173,6 +224,11 @@
                         this.users = data
                         this.listLoading = false
                         // NProgress.done();
+                    })
+                }else{
+                    this.$message({
+                        message: '权限不足',
+                        type: 'warning'
                     })
                 }
                 // NProgress.start();
@@ -184,16 +240,23 @@
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true
-                    let para = { userid: row.userid }
-                    deluser(para).then((res) => {
-                        this.listLoading = false
-                        // NProgress.done();
+                    if (row.userid==2){
                         this.$message({
-                            message: '删除成功',
-                            type: 'success'
+                            message:'此用户不可被删除',
+                            type:'error'
                         })
-                        this.getUsers()
-                    })
+                    } else {
+                        let para = { userid: row.userid }
+                        deluser(para).then((res) => {
+                            // NProgress.done();
+                            this.$message({
+                                message: '删除成功',
+                                type: 'success'
+                            })
+                            this.getUsers()
+                        })
+                    }
+                    this.listLoading = false
                 }).catch(() => {
 
                 })

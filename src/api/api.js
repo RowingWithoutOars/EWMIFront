@@ -1,7 +1,6 @@
 import axios from 'axios'
-// axios.defaults.baseURL = 'http://139.180.214.182:8080/EWMIS/'
-axios.defaults.baseURL = 'http://localhost:8080/'
-
+axios.defaults.baseURL = 'http://47.101.213.106:8080/EWMIS/'
+// axios.defaults.baseURL = 'http://localhost:8080/EWMIS/'
 export const listData = params => {
     return axios.post('/data/listData', params).then(
         res => res.data
@@ -15,6 +14,12 @@ export const listData2 = params => {
 
 export const listSingleData = params => {
     return axios.post('/data/listSingleData', params).then(
+        res => res.data
+    )
+}
+
+export const listMoreData = params => {
+    return axios.post('/data/listDataByMOre', params).then(
         res => res.data
     )
 }
@@ -35,12 +40,13 @@ export const addData = params => {
 
 export const delData = params => {
     console.log("params:"+params)
+
     return axios.post('/data/delData', params).then(
         res => res.data
     )
 }
 
-export const updateData = params => {
+export const renewData = params => {
     console.log("params:"+params)
     return axios.post('/data/updateData', params).then(
         res => res.data
@@ -85,6 +91,12 @@ export const requestLogin = params => {
 
 export const exportExcel = params => {
     return axios.post('/data/excel/export', params).then(
+        res => res.data
+    )
+}
+
+export const getRiqi = params => {
+    return axios.post('/data/getRiqi', params).then(
         res => res.data
     )
 }

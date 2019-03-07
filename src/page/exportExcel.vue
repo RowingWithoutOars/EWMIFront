@@ -9,7 +9,14 @@
             </el-option>
         </el-select>
 
-        <el-select v-model="value11" placeholder="请选择">
+        <el-select
+            v-model="value11"
+            filterable
+            remote
+            reserve-keyword
+            placeholder="请输入关键词"
+            :remote-method="remoteMethod"
+            :loading="loading">
             <el-option
                 v-for="item in options2"
                 :key="item.value"
@@ -22,13 +29,35 @@
 </template>
 
 <script>
+    import {getRiqi} from "../api/api";
     export default {
         methods: {
             handleChaxun() {
-                console.log(this.value5)
-                console.log(this.value11)
-                location.href="http://localhost:8080/EWMIS/data/excel/export?value5="+this.value5+"&value11="+this.value11;
+                // console.log(this.value5)
+                // console.log(this.value11)
+                // location.href="http://localhost:8080/EWMIS/data/excel/export?value5="+this.value5+"&value11="+this.value11;
+                location.href="http://47.101.213.106:8080/EWMIS/data/excel/export?value5="+this.value5+"&value11="+this.value11;
+
+            },
+            remoteMethod(query) {
+                if (query !== '') {
+                    this.loading = true;
+                    getRiqi(query).then((result) => {
+                        setTimeout(() => {
+                            this.loading = false;
+                            let {data} = result
+                            this.states = data
+                            this.options2 = this.states.map(item => {
+                                return { value: item, label: item };
+                            });
+                            console.log(this.options2)
+                        }, 200);
+                    })
+                } else {
+                    this.options4 = [];
+                }
             }
+
         },
         data() {
             return {
@@ -71,8 +100,15 @@
                     }
                 ],
                 value5: [],
-                value11: []
+                value11: [],
+                loading: false,
+                states: []
             }
+        },
+        mounted() {
+            this.options2 = this.states.map(item => {
+                return { value: item, label: item };
+            });
         }
     }
 </script>

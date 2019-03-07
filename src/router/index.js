@@ -6,7 +6,7 @@ Vue.use(Router)
 const login = r => require.ensure([], () => r(require('@/page/login')), 'login');
 
 const manage = r => require.ensure([], () => r(require('@/page/manage')), 'manage');
-const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
+// const home = r => require.ensure([], () => r(require('@/page/home')), 'home');
 
 const updateData = r => require.ensure([], () => r(require('@/page/updateData')), 'updateData');
 const addData = r => require.ensure([], () => r(require('@/page/addData')), 'addData');
@@ -30,8 +30,8 @@ const xkwdnlist = r => require.ensure([], () => r(require('@/page/list/xkwdnlist
 const szsjlist = r => require.ensure([], () => r(require('@/page/list/szsjlist')), 'szsjlist');
 
 
-
-const visitor = r => require.ensure([], () => r(require('@/page/visitor')), 'visitor');
+const importExcel = r => require.ensure([], () => r(require('@/page/importExcel')), 'importExcel');
+const exportExcel = r => require.ensure([], () => r(require('@/page/exportExcel')), 'exportExcel');
 const minChart = r => require.ensure([], () => r(require('@/page/statistics/minChart')), 'minChart');
 const statistic = r => require.ensure([], () => r(require('@/page/statistic')), 'statistic');
 
@@ -39,19 +39,31 @@ const adminSet = r => require.ensure([], () => r(require('@/page/adminSet')), 'a
 const explain = r => require.ensure([], () => r(require('@/page/explain')), 'explain');
 const map = r => require.ensure([], () => r(require('@/page/home/map')), 'map');
 
+const err403 = r => require.ensure([], () => r(require('@/page/403')), '403');
+const err404 = r => require.ensure([], () => r(require('@/page/404')), '404');
 const routes = [
 	{
-		path: '/',
+		path: '/login',
 		component: login
-	},
+	},{
+        path: '/',
+        component: login
+    },
+    {
+        path: '/403',
+        component: err403
+    },
+    {
+        path: '/404',
+        component: err404
+    },
 	{
-		path: '/manage',
+		path: '/home',
 		component: manage,
 		cyd: '',
 		children: [{
-            path: '',
-            component: home,
-            meta: [],
+            path: '/',
+            component: map,
 		},{
             path: '/fyzwlist',
             component: fyzwlist,
@@ -90,10 +102,13 @@ const routes = [
             component: szsjlist,
             // meta: ['胥口湾底泥数据', '胥口湾底泥数据'],
         }, {
-			path: '/visitor',
-			component: visitor,
+			path: '/exportExcel',
+			component: exportExcel,
 			// meta: ['图表', '用户分布'],
 		},{
+            path: '/importExcel',
+            component: importExcel,
+        },{
             path: '/statistic',
             component: statistic,
             // meta: ['图表', '统计'],
@@ -101,7 +116,7 @@ const routes = [
         {
 			path: '/adminSet',
 			component: adminSet,
-			// meta: ['设置', '管理员设置'],
+			meta: {permission: true},
 		},{
 			path: '/explain',
 			component: explain,

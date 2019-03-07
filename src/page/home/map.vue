@@ -1,8 +1,7 @@
 <template>
     <div id="helloworld">
-        <h1>采样点位地图标识</h1>
+        <el-alert>Tips:地图需加载的资源过多，刷新后为您加载</el-alert>
         <div id="map2"></div>
-
         <OutMap :om="giveOutData"></OutMap>
     </div>
 

@@ -207,8 +207,8 @@
                 addFormVisible: false, // 新增界面是否显示
                 editLoading: false,
                 value1: '密度',
-                lb: "700",
-                para:{"lb":700 ,"userid":sessionStorage.getItem("userid")}
+                lb: "800",
+                para:{"lb":800 ,"userid":sessionStorage.getItem("userid")}
             }
         },
         components: {
@@ -235,7 +235,7 @@
                 console.log(this.addForm)
                 this.addForm['value1'] = '密度'
                 this.addForm['userid'] = sessionStorage.getItem('userid')
-                this.addForm['lb'] = 700
+                this.addForm['lb'] = 800
             },
             addSumbit(addForm){
                 this.$refs[addForm].validate(async (valid) => {

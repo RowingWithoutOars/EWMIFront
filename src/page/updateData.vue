@@ -39,7 +39,7 @@
 
 <script>
     import headTop from '../components/headTop'
-    import {updateData} from '../api/api'
+    import {renewData} from '../api/api'
     import {baseUrl, baseImgPath} from '@/config/env'
     export default {
         data(){
@@ -75,7 +75,7 @@
                             ...this.dataForm,
                         }
                         try{
-                            const result = await updateData(params);
+                            const result = await renewData(params);
                             if (result.status == 1) {
                                 console.log(result)
                                 this.$message({

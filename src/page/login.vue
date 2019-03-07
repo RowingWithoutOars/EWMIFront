@@ -1,29 +1,36 @@
 <template>
-    <el-form :model="account" :rules="rules" label-position="left" label-width="0px"
-             class="demo-ruleForm login-container">
-        <h3 class="title">系统登录</h3>
-        <el-form-item prop="username">
-            <el-input type="text" v-model="account.username" auto-complete="off" placeholder="账号"></el-input>
-        </el-form-item>
-        <el-form-item prop="pwd">
-            <el-input type="password" v-model="account.pwd" auto-complete="off" placeholder="密码"></el-input>
-        </el-form-item>
-        <el-checkbox v-model="checked" checked class="remember">记住密码</el-checkbox>
-        <el-form-item style="width:100%;">
-            <el-button type="primary" style="width:100%;" @click="handleLogin" :loading="logining" >登录</el-button>
-        </el-form-item>
-    </el-form>
+    <div class="login-wrap">
+        <div class="ms-login">
+            <div class="ms-title">胥口湾水质信息管理系统</div>
+            <el-form :model="account" :rules="rules" label-width="0px" class="ms-content">
+                <el-form-item prop="username">
+                    <el-input v-model="account.username" placeholder="username">
+                        <el-button slot="prepend" icon="el-icon-lx-people">账号</el-button>
+                    </el-input>
+                </el-form-item>
+                <el-form-item prop="password">
+                    <el-input type="password" placeholder="password" v-model="account.pwd" @keyup.enter.native="submitForm('ruleForm')">
+                        <el-button slot="prepend" icon="el-icon-lx-lock">密码</el-button>
+                    </el-input>
+                </el-form-item>
+                <div class="login-btn">
+                    <el-button type="primary" @click="handleLogin()">登录</el-button>
+                </div>
+                <p class="login-tips">Tips : 账户信息请联系管理员。</p>
+            </el-form>
+        </div>
+    </div>
 </template>
 
 <script>
     import {requestLogin} from '../api/api'
     export default {
-        data () {
+        data: function(){
             return {
                 logining: false,
                 account: {
-                    username: 'test',
-                    pwd: 'test'
+                    username: 'Test1',
+                    pwd: 'Test1'
                 },
                 rules: {
                     username: [
@@ -48,8 +55,9 @@
                     if (code === 200) {
                         // 登录成功，把用户信息保存在sessionStorage中
                         sessionStorage.setItem('userid', userid)
+                        sessionStorage.setItem('username',this.account.username)
                         // 跳转到主界面
-                        this.$router.push({ path: '/manage' })
+                        this.$router.push({ path: '/home' })
                     } else {
                         this.$message({
                             message: '登录失败',
@@ -61,15 +69,48 @@
             }
         }
     }
-
 </script>
 
-<style>
-    body{
-        background: #DFE9FB;
+<style scoped>
+    .login-wrap{
+        position: relative;
+        width:100%;
+        height:100%;
+        background-image: url(../assets/img/login_1.png);
+        background-size: 100%;
     }
-    .login-container{
+    .ms-title{
+        width:100%;
+        line-height: 50px;
+        text-align: center;
+        font-size:20px;
+        color: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+    .ms-login{
+        position: absolute;
+        left:50%;
+        top:50%;
         width:350px;
-        margin-left:35%;
+        margin:-190px 0 0 -175px;
+        border-radius: 5px;
+        background: rgba(255,255,255, 0.3);
+        overflow: hidden;
+    }
+    .ms-content{
+        padding: 30px 30px;
+    }
+    .login-btn{
+        text-align: center;
+    }
+    .login-btn button{
+        width:100%;
+        height:36px;
+        margin-bottom: 10px;
+    }
+    .login-tips{
+        font-size:12px;
+        line-height:30px;
+        color:#fff;
     }
 </style>
