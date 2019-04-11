@@ -26,7 +26,7 @@ module.exports = {
         port: 8002,
         autoOpenBrowser: true,
         assetsSubDirectory: 'static',
-        assetsPublicPath: '/',
+        assetsPublicPath: './',
         proxyTable: {},
         context: [ //代理路径
             '/shopping',
